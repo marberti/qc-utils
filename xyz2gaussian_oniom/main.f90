@@ -212,7 +212,7 @@ subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
       end do
 
     case default
-      write(*,*) my_name//": Unexpected string '"//trim(buff)//"'"
+      write(*,*) my_name//": Invalid key '"//trim(key)//"'"
       stop 1
 
     end select
