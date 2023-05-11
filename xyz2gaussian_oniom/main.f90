@@ -10,10 +10,10 @@ program main
     character(20) :: atype
   end type link_t
 
-  type :: label_t
+  type :: dlabel_t
     character(20) :: from
     character(20) :: to
-  end type label_t
+  end type dlabel_t
 
   character(*), parameter :: prog_name = "xyz2gaussian_oniom"
   integer, parameter :: xyz_fnumb_in  = 2000
@@ -23,8 +23,8 @@ program main
   integer :: high_n
   integer :: link_n
   type(link_t), allocatable, dimension(:) :: link_list
-  integer :: label_n
-  type(label_t), allocatable, dimension(:) :: label_list
+  integer :: dlabel_n
+  type(dlabel_t), allocatable, dimension(:) :: dlabel_list
   integer :: an
   character(120) :: comment_line
   character(2)  :: el
@@ -60,7 +60,7 @@ program main
     stop 1
   end if
 
-  call read_control(high_n,link_n,link_list,label_n,label_list)
+  call read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
 
   read(xyz_fnumb_in,*) an
   write(xyz_fnumb_out,*) an
@@ -71,9 +71,9 @@ program main
     read(xyz_fnumb_in,*) el, x, y, z
     flag_skip = .false.
     el_out = el
-    do j = 1, label_n
-      if (trim(el) == trim(label_list(j)%from)) then
-        el_out = label_list(j)%to
+    do j = 1, dlabel_n
+      if (trim(el) == trim(dlabel_list(j)%from)) then
+        el_out = dlabel_list(j)%to
         exit
       end if
     end do
@@ -120,14 +120,14 @@ subroutine help(prog_name)
 
 end subroutine help
 
-subroutine read_control(high_n,link_n,link_list,label_n,label_list)
+subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
 
   character(*), parameter :: my_name = "read_control"
   integer, intent(out) :: high_n
   integer, intent(out) :: link_n
   type(link_t), allocatable, dimension(:), intent(out) :: link_list
-  integer, intent(out) :: label_n
-  type(label_t), allocatable, dimension(:), intent(out) :: label_list
+  integer, intent(out) :: dlabel_n
+  type(dlabel_t), allocatable, dimension(:), intent(out) :: dlabel_list
   character(*), parameter :: fname = "control"
   integer, parameter :: fnumb = 2010
   character(200) :: buff
@@ -187,26 +187,26 @@ subroutine read_control(high_n,link_n,link_list,label_n,label_list)
         end if
       end do
 
-    case ("labels")
-      read(buff,*,iostat=err_n) str, label_n
+    case ("defaultlabels")
+      read(buff,*,iostat=err_n) str, dlabel_n
       if (err_n /= 0) then
-        write(*,*) my_name//": Unable to read 'labels' number"
+        write(*,*) my_name//": Unable to read 'defaultlabels' number"
         stop 1
       end if
-      if (label_n < 0) then
-        write(*,*) my_name//": 'labels' cannot be lesser than zero"
+      if (dlabel_n < 0) then
+        write(*,*) my_name//": 'defaultlabels' cannot be lesser than zero"
         stop 1
       end if
-      allocate(label_list(label_n),stat=err_n,errmsg=err_msg)
+      allocate(dlabel_list(dlabel_n),stat=err_n,errmsg=err_msg)
       if (err_n /= 0) then
         write(*,*) my_name//": "//trim(err_msg)
         stop 1
       end if
-      do i = 1, label_n
+      do i = 1, dlabel_n
         read(fnumb,*,iostat=err_n) &
-          label_list(i)%from, label_list(i)%to
+          dlabel_list(i)%from, dlabel_list(i)%to
         if (err_n /= 0) then
-          write(*,*) my_name//": Bad format in 'labels' line"
+          write(*,*) my_name//": Bad format in 'defaultlabels' line"
           stop 1
         end if
       end do
@@ -252,8 +252,8 @@ subroutine make_control_template()
     "# Number of link atoms. <int> lines follow"
   write(fnumb,'(A)') "<int1> <int2> <char>  "//&
     "# Link <int1> (low) to <int2> (high) as <char>"
-  write(fnumb,'(A)') "labels <int>          "//&
-    "# Number of labels (optional). <int> lines follow"
+  write(fnumb,'(A)') "defaultlabels <int>   "//&
+    "# Number of defaultlabels (optional). <int> lines follow"
   write(fnumb,'(A)') "<char1> <char2>       "//&
     "# Substitute each atom <char1> with <char2>"
 
