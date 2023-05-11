@@ -15,6 +15,11 @@ program main
     character(20) :: to
   end type dlabel_t
 
+  type :: slabel_t
+    integer :: n
+    character(20) :: l
+  end type slabel_t
+
   character(*), parameter :: prog_name = "xyz2gaussian_oniom"
   integer, parameter :: xyz_fnumb_in  = 2000
   integer, parameter :: xyz_fnumb_out = 2001
@@ -25,6 +30,8 @@ program main
   type(link_t), allocatable, dimension(:) :: link_list
   integer :: dlabel_n
   type(dlabel_t), allocatable, dimension(:) :: dlabel_list
+  integer :: slabel_n
+  type(slabel_t), allocatable, dimension(:) :: slabel_list
   integer :: an
   character(120) :: comment_line
   character(2)  :: el
@@ -60,7 +67,8 @@ program main
     stop 1
   end if
 
-  call read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
+  call read_control(high_n,link_n,link_list,dlabel_n,dlabel_list,&
+    slabel_n,slabel_list)
 
   read(xyz_fnumb_in,*) an
   write(xyz_fnumb_out,*) an
@@ -74,6 +82,12 @@ program main
     do j = 1, dlabel_n
       if (trim(el) == trim(dlabel_list(j)%from)) then
         el_out = dlabel_list(j)%to
+        exit
+      end if
+    end do
+    do j = 1, slabel_n
+      if (i == slabel_list(j)%n) then
+        el_out = slabel_list(j)%l
         exit
       end if
     end do
@@ -120,7 +134,8 @@ subroutine help(prog_name)
 
 end subroutine help
 
-subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
+subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list,&
+    slabel_n,slabel_list)
 
   character(*), parameter :: my_name = "read_control"
   integer, intent(out) :: high_n
@@ -128,6 +143,8 @@ subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
   type(link_t), allocatable, dimension(:), intent(out) :: link_list
   integer, intent(out) :: dlabel_n
   type(dlabel_t), allocatable, dimension(:), intent(out) :: dlabel_list
+  integer, intent(out) :: slabel_n
+  type(slabel_t), allocatable, dimension(:), intent(out) :: slabel_list
   character(*), parameter :: fname = "control"
   integer, parameter :: fnumb = 2010
   character(200) :: buff
@@ -211,6 +228,30 @@ subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list)
         end if
       end do
 
+    case ("speciallabels")
+      read(buff,*,iostat=err_n) str, slabel_n
+      if (err_n /= 0) then
+        write(*,*) my_name//": Unable to read 'speciallabels' number"
+        stop 1
+      end if
+      if (slabel_n < 0) then
+        write(*,*) my_name//": 'speciallabels' cannot be lesser than zero"
+        stop 1
+      end if
+      allocate(slabel_list(slabel_n),stat=err_n,errmsg=err_msg)
+      if (err_n /= 0) then
+        write(*,*) my_name//": "//trim(err_msg)
+        stop 1
+      end if
+      do i = 1, slabel_n
+        read(fnumb,*,iostat=err_n) &
+          slabel_list(i)%n, slabel_list(i)%l
+        if (err_n /= 0) then
+          write(*,*) my_name//": Bad format in 'speciallabels' line"
+          stop 1
+        end if
+      end do
+
     case default
       write(*,*) my_name//": Invalid key '"//trim(key)//"'"
       stop 1
@@ -256,6 +297,10 @@ subroutine make_control_template()
     "# Number of defaultlabels (optional). <int> lines follow"
   write(fnumb,'(A)') "<char1> <char2>       "//&
     "# Substitute each atom <char1> with <char2>"
+  write(fnumb,'(A)') "speciallabels <int>   "//&
+    "# Number of speciallabels (optional). <int> lines follow"
+  write(fnumb,'(A)') "<int> <char>          "//&
+    "# Substitute <int>-th atom with <char> label"
 
   close(unit=fnumb,iostat=err_n,iomsg=err_msg)
   if (err_n /= 0) then
