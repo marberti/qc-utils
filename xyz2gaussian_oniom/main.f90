@@ -161,6 +161,9 @@ subroutine read_control(high_n,link_n,link_list,dlabel_n,dlabel_list,&
     stop 1
   end if
 
+  dlabel_n = 0
+  slabel_n = 0
+
   high_n = -1
   link_n = -1
   do
