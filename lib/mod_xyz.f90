@@ -80,4 +80,15 @@ subroutine read_xyz(fname,xyz)
 
 end subroutine read_xyz
 
+subroutine write_xyz(xyz)
+
+  type(xyz_t), intent(in) :: xyz
+  integer :: i
+
+  do i = 1, xyz%n
+    write(*,'(1X,A2,3(3X,F11.6))') xyz%el(i), xyz%x(i), xyz%y(i), xyz%z(i)
+  end do
+
+end subroutine write_xyz
+
 end module mod_xyz
