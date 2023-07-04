@@ -37,6 +37,11 @@ xyz2gaussian_oniom/*.xyz
 xyz2gaussian_oniom/*.2oniom
 xyz2gaussian_oniom/control
 
+# xyz_replicate
+xyz_replicate/*.xyz
+xyz_replicate/*.replicated
+xyz_replicate/control*
+
 # distance_matrix
 distance_matrix/*.xyz
 distance_matrix/out
