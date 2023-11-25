@@ -115,6 +115,18 @@ void analyze_xyz(char *fname, struct xyz_dat_s *x) {
 
 void write_analysis_results(struct xyz_dat_s *x, int x_n) {
   int i, j, eq;
+  char found_e[E_LEN];
+  char el[3];
+
+  for (i = 0; i < E_LEN; i++) {
+    found_e[i] = 0;
+  }
+
+  for (i = 0; i < E_LEN; i++) {
+    for (j = 0; (j < x_n) && (found_e[i] == 0); j++) {
+      if (x[j].e[i] != 0) found_e[i] = 1;
+    }
+  }
 
   printf("File");
   for (i = 0; i < x_n; i++) {
@@ -127,6 +139,17 @@ void write_analysis_results(struct xyz_dat_s *x, int x_n) {
     printf("\t\t%5d",x[i].an);
   }
   printf("\n");
+
+  for (i = 0; i < E_LEN; i++) {
+    if (found_e[i] == 1) {
+      get_atom_name(i,el);
+      printf("  %-2s",el);
+      for (j = 0; j < x_n; j++) {
+        printf("\t\t%5d",x[j].e[i]);
+      }
+      printf("\n");
+    }
+  }
 
   printf("Electr");
   for (i = 0; i < x_n; i++) {
@@ -288,122 +311,124 @@ int get_atomic_number(char *atom) {
 }
 
 void get_atom_name(int an, char *name) {
-  if (an =   1) strcpy(name,"H" );
-  if (an =   2) strcpy(name,"He");
-  if (an =   3) strcpy(name,"Li");
-  if (an =   4) strcpy(name,"Be");
-  if (an =   5) strcpy(name,"B" );
-  if (an =   6) strcpy(name,"C" );
-  if (an =   7) strcpy(name,"N" );
-  if (an =   8) strcpy(name,"O" );
-  if (an =   9) strcpy(name,"F" );
-  if (an =  10) strcpy(name,"Ne");
-  if (an =  11) strcpy(name,"Na");
-  if (an =  12) strcpy(name,"Mg");
-  if (an =  13) strcpy(name,"Al");
-  if (an =  14) strcpy(name,"Si");
-  if (an =  15) strcpy(name,"P" );
-  if (an =  16) strcpy(name,"S" );
-  if (an =  17) strcpy(name,"Cl");
-  if (an =  18) strcpy(name,"Ar");
-  if (an =  19) strcpy(name,"K" );
-  if (an =  20) strcpy(name,"Ca");
-  if (an =  21) strcpy(name,"Sc");
-  if (an =  22) strcpy(name,"Ti");
-  if (an =  23) strcpy(name,"V" );
-  if (an =  24) strcpy(name,"Cr");
-  if (an =  25) strcpy(name,"Mn");
-  if (an =  26) strcpy(name,"Fe");
-  if (an =  27) strcpy(name,"Co");
-  if (an =  28) strcpy(name,"Ni");
-  if (an =  29) strcpy(name,"Cu");
-  if (an =  30) strcpy(name,"Zn");
-  if (an =  31) strcpy(name,"Ga");
-  if (an =  32) strcpy(name,"Ge");
-  if (an =  33) strcpy(name,"As");
-  if (an =  34) strcpy(name,"Se");
-  if (an =  35) strcpy(name,"Br");
-  if (an =  36) strcpy(name,"Kr");
-  if (an =  37) strcpy(name,"Rb");
-  if (an =  38) strcpy(name,"Sr");
-  if (an =  39) strcpy(name,"Y" );
-  if (an =  40) strcpy(name,"Zr");
-  if (an =  41) strcpy(name,"Nb");
-  if (an =  42) strcpy(name,"Mo");
-  if (an =  43) strcpy(name,"Tc");
-  if (an =  44) strcpy(name,"Ru");
-  if (an =  45) strcpy(name,"Rh");
-  if (an =  46) strcpy(name,"Pd");
-  if (an =  47) strcpy(name,"Ag");
-  if (an =  48) strcpy(name,"Cd");
-  if (an =  49) strcpy(name,"In");
-  if (an =  50) strcpy(name,"Sn");
-  if (an =  51) strcpy(name,"Sb");
-  if (an =  52) strcpy(name,"Te");
-  if (an =  53) strcpy(name,"I" );
-  if (an =  54) strcpy(name,"Xe");
-  if (an =  55) strcpy(name,"Cs");
-  if (an =  56) strcpy(name,"Ba");
-  if (an =  57) strcpy(name,"La");
-  if (an =  58) strcpy(name,"Ce");
-  if (an =  59) strcpy(name,"Pr");
-  if (an =  60) strcpy(name,"Nd");
-  if (an =  61) strcpy(name,"Pm");
-  if (an =  62) strcpy(name,"Sm");
-  if (an =  63) strcpy(name,"Eu");
-  if (an =  64) strcpy(name,"Gd");
-  if (an =  65) strcpy(name,"Tb");
-  if (an =  66) strcpy(name,"Dy");
-  if (an =  67) strcpy(name,"Ho");
-  if (an =  68) strcpy(name,"Er");
-  if (an =  69) strcpy(name,"Tm");
-  if (an =  70) strcpy(name,"Yb");
-  if (an =  71) strcpy(name,"Lu");
-  if (an =  72) strcpy(name,"Hf");
-  if (an =  73) strcpy(name,"Ta");
-  if (an =  74) strcpy(name,"W" );
-  if (an =  75) strcpy(name,"Re");
-  if (an =  76) strcpy(name,"Os");
-  if (an =  77) strcpy(name,"Ir");
-  if (an =  78) strcpy(name,"Pt");
-  if (an =  79) strcpy(name,"Au");
-  if (an =  80) strcpy(name,"Hg");
-  if (an =  81) strcpy(name,"Tl");
-  if (an =  82) strcpy(name,"Pb");
-  if (an =  83) strcpy(name,"Bi");
-  if (an =  84) strcpy(name,"Po");
-  if (an =  85) strcpy(name,"At");
-  if (an =  86) strcpy(name,"Rn");
-  if (an =  87) strcpy(name,"Fr");
-  if (an =  88) strcpy(name,"Ra");
-  if (an =  89) strcpy(name,"Ac");
-  if (an =  90) strcpy(name,"Th");
-  if (an =  91) strcpy(name,"Pa");
-  if (an =  92) strcpy(name,"U" );
-  if (an =  93) strcpy(name,"Np");
-  if (an =  94) strcpy(name,"Pu");
-  if (an =  95) strcpy(name,"Am");
-  if (an =  96) strcpy(name,"Cm");
-  if (an =  97) strcpy(name,"Bk");
-  if (an =  98) strcpy(name,"Cf");
-  if (an =  99) strcpy(name,"Es");
-  if (an = 100) strcpy(name,"Fm");
-  if (an = 101) strcpy(name,"Md");
-  if (an = 102) strcpy(name,"No");
-  if (an = 103) strcpy(name,"Lr");
-  if (an = 104) strcpy(name,"Rf");
-  if (an = 105) strcpy(name,"Db");
-  if (an = 106) strcpy(name,"Sg");
-  if (an = 107) strcpy(name,"Bh");
-  if (an = 108) strcpy(name,"Hs");
-  if (an = 109) strcpy(name,"Mt");
-  if (an = 110) strcpy(name,"Ds");
-  if (an = 111) strcpy(name,"Rg");
-  if (an = 112) strcpy(name,"Cn");
-  if (an = 113) strcpy(name,"Nh");
-  if (an = 114) strcpy(name,"Fl");
-  if (an = 115) strcpy(name,"Mc");
-  if (an = 116) strcpy(name,"Lv");
-  if (an = 117) strcpy(name,"Ts");
-  if (an = 118) strcpy(name,"Og");
+  if (an <=   0) strcpy(name,"--");
+  if (an ==   1) strcpy(name,"H" );
+  if (an ==   2) strcpy(name,"He");
+  if (an ==   3) strcpy(name,"Li");
+  if (an ==   4) strcpy(name,"Be");
+  if (an ==   5) strcpy(name,"B" );
+  if (an ==   6) strcpy(name,"C" );
+  if (an ==   7) strcpy(name,"N" );
+  if (an ==   8) strcpy(name,"O" );
+  if (an ==   9) strcpy(name,"F" );
+  if (an ==  10) strcpy(name,"Ne");
+  if (an ==  11) strcpy(name,"Na");
+  if (an ==  12) strcpy(name,"Mg");
+  if (an ==  13) strcpy(name,"Al");
+  if (an ==  14) strcpy(name,"Si");
+  if (an ==  15) strcpy(name,"P" );
+  if (an ==  16) strcpy(name,"S" );
+  if (an ==  17) strcpy(name,"Cl");
+  if (an ==  18) strcpy(name,"Ar");
+  if (an ==  19) strcpy(name,"K" );
+  if (an ==  20) strcpy(name,"Ca");
+  if (an ==  21) strcpy(name,"Sc");
+  if (an ==  22) strcpy(name,"Ti");
+  if (an ==  23) strcpy(name,"V" );
+  if (an ==  24) strcpy(name,"Cr");
+  if (an ==  25) strcpy(name,"Mn");
+  if (an ==  26) strcpy(name,"Fe");
+  if (an ==  27) strcpy(name,"Co");
+  if (an ==  28) strcpy(name,"Ni");
+  if (an ==  29) strcpy(name,"Cu");
+  if (an ==  30) strcpy(name,"Zn");
+  if (an ==  31) strcpy(name,"Ga");
+  if (an ==  32) strcpy(name,"Ge");
+  if (an ==  33) strcpy(name,"As");
+  if (an ==  34) strcpy(name,"Se");
+  if (an ==  35) strcpy(name,"Br");
+  if (an ==  36) strcpy(name,"Kr");
+  if (an ==  37) strcpy(name,"Rb");
+  if (an ==  38) strcpy(name,"Sr");
+  if (an ==  39) strcpy(name,"Y" );
+  if (an ==  40) strcpy(name,"Zr");
+  if (an ==  41) strcpy(name,"Nb");
+  if (an ==  42) strcpy(name,"Mo");
+  if (an ==  43) strcpy(name,"Tc");
+  if (an ==  44) strcpy(name,"Ru");
+  if (an ==  45) strcpy(name,"Rh");
+  if (an ==  46) strcpy(name,"Pd");
+  if (an ==  47) strcpy(name,"Ag");
+  if (an ==  48) strcpy(name,"Cd");
+  if (an ==  49) strcpy(name,"In");
+  if (an ==  50) strcpy(name,"Sn");
+  if (an ==  51) strcpy(name,"Sb");
+  if (an ==  52) strcpy(name,"Te");
+  if (an ==  53) strcpy(name,"I" );
+  if (an ==  54) strcpy(name,"Xe");
+  if (an ==  55) strcpy(name,"Cs");
+  if (an ==  56) strcpy(name,"Ba");
+  if (an ==  57) strcpy(name,"La");
+  if (an ==  58) strcpy(name,"Ce");
+  if (an ==  59) strcpy(name,"Pr");
+  if (an ==  60) strcpy(name,"Nd");
+  if (an ==  61) strcpy(name,"Pm");
+  if (an ==  62) strcpy(name,"Sm");
+  if (an ==  63) strcpy(name,"Eu");
+  if (an ==  64) strcpy(name,"Gd");
+  if (an ==  65) strcpy(name,"Tb");
+  if (an ==  66) strcpy(name,"Dy");
+  if (an ==  67) strcpy(name,"Ho");
+  if (an ==  68) strcpy(name,"Er");
+  if (an ==  69) strcpy(name,"Tm");
+  if (an ==  70) strcpy(name,"Yb");
+  if (an ==  71) strcpy(name,"Lu");
+  if (an ==  72) strcpy(name,"Hf");
+  if (an ==  73) strcpy(name,"Ta");
+  if (an ==  74) strcpy(name,"W" );
+  if (an ==  75) strcpy(name,"Re");
+  if (an ==  76) strcpy(name,"Os");
+  if (an ==  77) strcpy(name,"Ir");
+  if (an ==  78) strcpy(name,"Pt");
+  if (an ==  79) strcpy(name,"Au");
+  if (an ==  80) strcpy(name,"Hg");
+  if (an ==  81) strcpy(name,"Tl");
+  if (an ==  82) strcpy(name,"Pb");
+  if (an ==  83) strcpy(name,"Bi");
+  if (an ==  84) strcpy(name,"Po");
+  if (an ==  85) strcpy(name,"At");
+  if (an ==  86) strcpy(name,"Rn");
+  if (an ==  87) strcpy(name,"Fr");
+  if (an ==  88) strcpy(name,"Ra");
+  if (an ==  89) strcpy(name,"Ac");
+  if (an ==  90) strcpy(name,"Th");
+  if (an ==  91) strcpy(name,"Pa");
+  if (an ==  92) strcpy(name,"U" );
+  if (an ==  93) strcpy(name,"Np");
+  if (an ==  94) strcpy(name,"Pu");
+  if (an ==  95) strcpy(name,"Am");
+  if (an ==  96) strcpy(name,"Cm");
+  if (an ==  97) strcpy(name,"Bk");
+  if (an ==  98) strcpy(name,"Cf");
+  if (an ==  99) strcpy(name,"Es");
+  if (an == 100) strcpy(name,"Fm");
+  if (an == 101) strcpy(name,"Md");
+  if (an == 102) strcpy(name,"No");
+  if (an == 103) strcpy(name,"Lr");
+  if (an == 104) strcpy(name,"Rf");
+  if (an == 105) strcpy(name,"Db");
+  if (an == 106) strcpy(name,"Sg");
+  if (an == 107) strcpy(name,"Bh");
+  if (an == 108) strcpy(name,"Hs");
+  if (an == 109) strcpy(name,"Mt");
+  if (an == 110) strcpy(name,"Ds");
+  if (an == 111) strcpy(name,"Rg");
+  if (an == 112) strcpy(name,"Cn");
+  if (an == 113) strcpy(name,"Nh");
+  if (an == 114) strcpy(name,"Fl");
+  if (an == 115) strcpy(name,"Mc");
+  if (an == 116) strcpy(name,"Lv");
+  if (an == 117) strcpy(name,"Ts");
+  if (an == 118) strcpy(name,"Og");
+  if (an >= 119) strcpy(name,"--");
 }
