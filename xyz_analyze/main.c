@@ -35,6 +35,10 @@ int main(int argc, char **argv)
     error(1,0,"Max %d xyz files can be specified",XYZ_N);
   }
   printf("Total xyz files to analyze: %d\n",xyz_n);
+  for (i = 1; i <= xyz_n; i++) {
+    printf("  F%d <- %s\n",i,argv[i]);
+  }
+  printf("\n");
 
   for (i = 0; i < xyz_n; i++) {
     init_xyz_struct(&xyz[i]);
@@ -57,7 +61,9 @@ void init_xyz_struct(struct xyz_dat_s *x) {
   for (i = 0; i < E_LEN; i++) {
     x->e[i] = 0;
   }
-  x->o[0] = '\0';
+  for (i = 0; i <= O_LEN; i++) {
+    x->o[i] = '\0';
+  }
 }
 
 void analyze_xyz(char *fname, struct xyz_dat_s *x) {
@@ -168,7 +174,10 @@ void write_analysis_results(struct xyz_dat_s *x, int x_n) {
       for (j = 1; j < x_n; j++) {
         if (j <= i) printf("\t\t");
         else {
-          for (eq = 0; (eq < O_LEN) && (x[i].o[eq] == x[j].o[eq]); eq++);
+          for (eq = 0;
+               (eq < O_LEN) && (x[i].o[eq] == x[j].o[eq]) &&
+               (x[i].o[eq] != '\0') && (x[j].o[eq] != '\0');
+               eq++);
           printf("\t\t%5d",eq / 2);
         }
       }
