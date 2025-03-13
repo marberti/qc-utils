@@ -47,6 +47,14 @@ int main(int argc, char *argv[]) {
     if (list[list_i] != -1) break;
   }
 
+  // check repeated entries
+  for (int i = list_i; i < LIST_LEN-1; i++) {
+    if (list[i] == list[i+1]) {
+      printf("Error: repeated entries in list of nuclei to lock\n");
+      return 1;
+    }
+  }
+
   /*
   for (int i = list_i; i < LIST_LEN; i++) {
     printf("%d\n",list[i]);
