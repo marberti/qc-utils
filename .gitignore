@@ -45,3 +45,6 @@ xyz_replicate/control*
 # distance_matrix
 distance_matrix/*.xyz
 distance_matrix/out
+
+# oniom_msysext
+oniom_msysext/modelsys.xyz
