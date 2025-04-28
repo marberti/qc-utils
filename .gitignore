@@ -48,3 +48,6 @@ distance_matrix/out
 
 # oniom_msysext
 oniom_msysext/modelsys.xyz
+
+# auto-resort
+auto-resort/*.xyz
