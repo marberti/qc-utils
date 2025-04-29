@@ -128,15 +128,16 @@ program main
     corresp(j) = best_i
   end do
 
+  write(*,*) "Correspondence:"
+  do i = 1, s1_n
+    write(*,*) i, " -> ", corresp(i)
+  end do
+
   do i = 1, s1_n
     if (s1_count(i) /= 1) then
       write(*,*) "Error: there is no one-to-one correspondence between s1 and s2"
       stop 1
     end if
-  end do
-
-  do i = 1, s1_n
-    write(*,*) i, " -> ", corresp(i)
   end do
 
   ! write output --------------------------------------------------------------
