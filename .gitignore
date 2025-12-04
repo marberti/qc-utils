@@ -32,6 +32,9 @@
 *.out
 *.app
 
+# axsf2xyz
+axsf2xyz/axsf2xyz
+
 # xyz2gaussian_oniom
 xyz2gaussian_oniom/*.xyz
 xyz2gaussian_oniom/*.2oniom
